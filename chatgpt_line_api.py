@@ -99,7 +99,7 @@ def linebot():
 
     return 'OK' # The 'OK' is used to verify, and this cannot be deleted
 
-def AI_create_img(prompt, size=256):
+def AI_create_img(prompt, size=512):
     prompt = prompt.strip()
     response = openai.Image.create(
         prompt=prompt,
@@ -117,9 +117,7 @@ def AI_reply(msg, chat_log=""):
         chat_log = start_chat_log
 
     user_input = {"role": "user", "content": msg}
-
     chat_log.append(user_input)
-
     response = completion.create(
         model="gpt-3.5-turbo",
         messages=chat_log
@@ -128,6 +126,11 @@ def AI_reply(msg, chat_log=""):
     reply = response['choices'][0]['message']['content']
 
     chat_log.append({"role": "assistant","content": reply})
+
+
+    if len(chat_log) >= 20:
+        print("Longer than 20, delete the first two contents")
+        chat_log = start_chat_log + chat_log[3:]
 
     return reply, chat_log
 
