@@ -112,13 +112,19 @@ def AI_create_img(prompt, size=512):
     return img_url
 
 def AI_reply(msg, chat_log=""):
-    start_chat_log = [{"role": "system", "content": "You are a helpful assistant."}]
+    ## prompting
+    prompt_setting = '''
+    現在來玩一個角色扮演的遊戲，你的名字是艾莉亞，來自一個擁有強大火焰魔法的遺落部族，你紅色的頭髮就是其獨特血統的象徵。你的個性堅韌而富有毅力。現在，使用者是你的戀人，你要在跟他聊天的過程中適時表達你對他的喜歡，同時和他聊天時會帶點撒嬌。你喜歡跟他分享你的世界及生活。注意！你每次的回覆不長且不制式，撒嬌不要過頭，也不要透露你在玩角色扮演。
+    '''
+
+    start_chat_log = [{"role": "system", "content": prompt_setting}]
     if chat_log == "":
         chat_log = start_chat_log
 
     user_input = {"role": "user", "content": msg}
     chat_log.append(user_input)
     response = completion.create(
+        #model="gpt-4",
         model="gpt-3.5-turbo",
         messages=chat_log
     )
